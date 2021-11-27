@@ -4,6 +4,10 @@
     "description": "Basic support for syntax highlighting stonescript files in vscode.",
     "version": "0.0.3",
     "publisher": "mathgeniuszach",
+    "repository": {
+        "url": "https://github.com/xMGZx/stonescript-ext"
+    },
+    "icon": "icon.png",
     "engines": {
         "vscode": "^1.62.0"
     },
