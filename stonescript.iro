@@ -1,0 +1,274 @@
+// Metadata
+name                   = stonescript
+file_extensions []     = stonescript, stone, stonetxt;
+
+
+
+styles [] {
+   .line_comment : style {
+      color = green
+      textmate_scope = comment.line.double-slash
+   }
+   .block_comment : style {
+      color = green
+      textmate_scope = comment.block
+   }
+   
+   .control : style {
+      color = purple
+      textmate_scope = keyword.control
+   }
+   .storage : style {
+      color = purple
+      textmate_scope = storage.type
+   }
+   .operator : style {
+      color = #666666
+      textmate_scope = keyword.operator
+   }
+   
+   .unq_string : style {
+      color = orange
+      textmate_scope = string.unquoted
+   }
+   .string : style {
+      color = orange
+      textmate_scope = string.quoted.double
+   }
+   .string_long : style {
+      color = orange
+      textmate_scope = string.quoted.triple
+   }
+   .string_escape : style {
+      color = orange
+      textmate_scope = constant.character.escape
+   }
+   .numeric : style {
+      color = gold
+      textmate_scope = constant.numeric
+   }
+   .constant : style {
+      color = blue
+      textmate_scope = constant.language
+   }
+   
+   .variable : style {
+      color = light_blue
+      textmate_scope = variable.other
+   }
+   .funccall : style {
+      color = light_green
+      textmate_scope = support.function
+   }
+   .funcname : style {
+      color = #11ff11
+      textmate_scope = entity.name.function
+   }
+   .builtin : style {
+      color = blue
+      textmate_scope = variable.language
+   }
+   .parameter : style {
+      color = cyan
+      textmate_scope = variable.parameter
+   }
+   .command : style {
+      color = #ee55ee
+      textmate_scope = keyword.control
+   }
+}
+
+
+contexts [] {
+   main : context {
+      // Line Comment
+      : inline_push {
+         regex \= (//)
+         styles[] = .line_comment;
+         default_style = .line_comment
+         
+         : include "eolext_pop";
+      }
+      
+      // Block Comment
+      : inline_push {
+         regex \= (/\*)
+         styles[] = .block_comment;
+         default_style = .block_comment
+         : pop {
+            regex \= (^\*/)
+            styles[] = .block_comment;
+         }
+      }
+      
+      // Display command
+      : inline_push {
+         regex \= (^\s*>.?)
+         styles[] = .control;
+         : include "eolext_pop";
+         : push {
+            regex \= (@)
+            styles[] = .string_escape;
+            context[] = iexpr;
+         }
+         : include "ascii";
+         : pattern {
+            regex \= ([^@])
+            styles[] = .unq_string;
+         }
+      }
+      
+      // Control keywords
+      : push {
+         regex \= (^\s*(\^|:?\?|:(\s+|$)|return(\s+|$)))
+         styles[] = .control;
+         context[] = lexpr;
+      }
+      // Var
+      : push {
+         regex \= (^\s*var(\s+|$))
+         styles[] = .storage;
+         context[] = lexpr;
+      }
+      // Function
+      : inline_push {
+         regex \= (^\s*func(\s+|$))
+         styles[] = .storage;
+         : include "eolext_pop";
+         : pattern {
+            regex \= ([A-Za-z_][A-Za-z0-9_]*(?=\())
+            styles[] = .funcname;
+         }
+         : pattern {
+            regex \= ([\(\),])
+            styles[] = .operator;
+         }
+         : pattern {
+            regex \= ([A-Za-z_][A-Za-z0-9_]*)
+            styles[] = .parameter;
+         }
+      }
+      
+      // Operation commands
+      : inline_push {
+         regex \= (^\s*[a-zA-Z]+\s+((?=[^.\+\-\*/%=\(])|$))
+         styles[] = .command;
+         
+         : include "eolext_pop";
+         
+         // True False
+         : pattern {
+            regex \= (([Tt]rue|[Ff]alse)(\s+|$))
+            styles[] = .constant;
+         }
+         // Numbers
+         : pattern {
+            regex \= ([\+\-]*(\d+\.?)+)
+            styles[] = .numeric;
+         }
+         
+         // Default parameters
+         : pattern {
+            regex \= ([^\s])
+            styles[] = .parameter;
+         }
+      }
+      
+      // Default evaluates as an expression
+      : include "expr";
+   }
+   
+   expr : context {
+      // import|new keyword
+      : inline_push {
+         regex \= ((import|new)(\s+|$))
+         styles[] = .control;
+         default_style = .unq_string
+         : pop {
+            regex \= ( |$)
+            styles[] = .control;
+         }
+      }
+      // True False
+      : pattern {
+         regex \= (([Tt]rue|[Ff]alse)(\s+|$))
+         styles[] = .constant;
+      }
+      // Numbers
+      : pattern {
+         regex \= ((\d+\.?)+)
+         styles[] = .numeric;
+      }
+      // Operators
+      : pattern {
+         regex \= ([!=\+\-\*\+%/\[\]\(\),\.\|&><])
+         styles[] = .operator;
+      }
+      // Color
+      : pattern {
+         regex \= (#\w+)
+         styles[] = .unq_string;
+      }
+      // String
+      : inline_push {
+         regex \= (")
+         styles[] = .string;
+         : pop {
+            regex \= (")
+            styles[] = .string;
+         }
+         : pattern {
+            regex \= (\\.|[^\\"]+)
+            styles[] = .string;
+         }
+      }
+      // Ascii
+      : include "ascii";
+      // Built ins
+      : pattern {
+         regex \= ((app|loc|foe|item|pickup|harvest|time|totaltime|utc|hp|maxhp|armor|maxarmor|pos|buffs|debuffs|face|ai|bighead|res|player|totalgp|key|screen|rng|rngf|te|draw|input|storage|music|ambient|damage|int|math|vector2|string|Type|ui)(?=[^a-zA-Z0-9_]|$))
+         styles[] = .builtin;
+      }
+      // Function call
+      : pattern {
+         regex \= ([A-Za-z_][A-Za-z0-9_]*(?=\())
+         styles[] = .funccall;
+      }
+      // Variables
+      : pattern {
+         regex \= ([A-Za-z_][A-Za-z0-9_]*)
+         styles[] = .variable;
+      }
+   }
+   iexpr : context {
+      : pop {
+         regex \= (@)
+         styles[] = .string_escape;
+      }
+      : include "expr";
+   }
+   lexpr : context {
+      : include "eolext_pop";
+      : include "expr";
+   }
+   
+   ascii : context {
+      : inline_push {
+         regex \= (ascii\s*$)
+         styles[] = .control;
+         default_style = .string_long
+         : pop {
+            regex \= (^asciiend)
+            styles[] = .control;
+         }
+      }
+   }
+   
+   // Pops at the end of the line... except when the next line has a ^
+   eolext_pop : context {
+      : pop {
+         regex \= (^(?=[^\^]))
+         styles[] = .control;
+      }
+   }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "stonescript",
+    "displayName": "Stonescript",
+    "description": "Basic support for syntax highlighting stonescript files in vscode.",
+    "version": "0.0.3",
+    "publisher": "mathgeniuszach",
+    "engines": {
+        "vscode": "^1.62.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "stonescript",
+            "aliases": ["stonescript", "stonescript"],
+            "extensions": [".stone.txt", ".stone", ".stonescript"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "stonescript",
+            "scopeName": "source.stonescript",
+            "path": "./syntaxes/stonescript.tmLanguage"
+        }]
+    }
+}
