@@ -2,7 +2,7 @@
     "name": "stonescript",
     "displayName": "Stonescript",
     "description": "Basic support for syntax highlighting stonescript files in vscode.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "mathgeniuszach",
     "repository": {
         "url": "https://github.com/xMGZx/stonescript-ext"

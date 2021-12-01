@@ -107,7 +107,7 @@
         </dict>
         <dict>
           <key>begin</key>
-          <string>(^\s*(\^|:?\?|:(\s+|$)|return(\s+|$)))</string>
+          <string>(^\s*(\^|:?\?|:|(return|for)(\s+|$)))</string>
           <key>beginCaptures</key>
           <dict>
             <key>1</key>
@@ -299,19 +299,19 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(([Tt]rue|[Ff]alse)(\s+|$))</string>
+          <string>((true|false)(\s+|$))</string>
           <key>name</key>
           <string>constant.language.stonescript</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>((\d+\.?)+)</string>
+          <string>((\d+(\.(?!\.))?)+)</string>
           <key>name</key>
           <string>constant.numeric.stonescript</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>([\x{0021}\x{003d}\+\-\*\+\x{0025}\x{002f}\[\]\(\)\x{002c}\.\|\x{0026}\x{003e}\x{003c}])</string>
+          <string>([\x{0021}\x{003d}\+\-\*\+\x{0025}\x{002f}\[\]\{\}\:\(\)\x{002c}\.\|\x{0026}\x{003e}\x{003c}])</string>
           <key>name</key>
           <string>keyword.operator.stonescript</string>
         </dict>
@@ -519,13 +519,13 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>(([Tt]rue|[Ff]alse)(\s+|$))</string>
+          <string>((true|false)(\s+|$))</string>
           <key>name</key>
           <string>constant.language.stonescript</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>([\+\-]*(\d+\.?)+)</string>
+          <string>((\d+(\.(?!\.))?)+)</string>
           <key>name</key>
           <string>constant.numeric.stonescript</string>
         </dict>

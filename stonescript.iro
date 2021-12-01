@@ -120,7 +120,7 @@ contexts [] {
       
       // Control keywords
       : push {
-         regex \= (^\s*(\^|:?\?|:(\s+|$)|return(\s+|$)))
+         regex \= (^\s*(\^|:?\?|:|(return|for)(\s+|$)))
          styles[] = .control;
          context[] = lexpr;
       }
@@ -158,12 +158,12 @@ contexts [] {
          
          // True False
          : pattern {
-            regex \= (([Tt]rue|[Ff]alse)(\s+|$))
+            regex \= ((true|false)(\s+|$))
             styles[] = .constant;
          }
          // Numbers
          : pattern {
-            regex \= ([\+\-]*(\d+\.?)+)
+            regex \= ((\d+(\.(?!\.))?)+)
             styles[] = .numeric;
          }
          
@@ -191,17 +191,17 @@ contexts [] {
       }
       // True False
       : pattern {
-         regex \= (([Tt]rue|[Ff]alse)(\s+|$))
+         regex \= ((true|false)(\s+|$))
          styles[] = .constant;
       }
       // Numbers
       : pattern {
-         regex \= ((\d+\.?)+)
+         regex \= ((\d+(\.(?!\.))?)+)
          styles[] = .numeric;
       }
       // Operators
       : pattern {
-         regex \= ([!=\+\-\*\+%/\[\]\(\),\.\|&><])
+         regex \= ([!=\+\-\*\+%/\[\]\{\}\:\(\),\.\|&><])
          styles[] = .operator;
       }
       // Color
