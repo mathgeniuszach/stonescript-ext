@@ -77,6 +77,10 @@
           </dict>
         </dict>
         <dict>
+          <key>include</key>
+          <string>#importer</string>
+        </dict>
+        <dict>
           <key>begin</key>
           <string>(^\s*&gt;.?)</string>
           <key>beginCaptures</key>
@@ -274,32 +278,12 @@
       <key>patterns</key>
       <array> 
         <dict>
-          <key>begin</key>
-          <string>((import|new)(\s+|$))</string>
-          <key>beginCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>keyword.control.stonescript</string>
-            </dict>
-          </dict>
-          <key>contentName</key>
-          <string>string.unquoted.stonescript</string>
-          <key>end</key>
-          <string>( |$)</string>
-          <key>endCaptures</key>
-          <dict>
-            <key>1</key>
-            <dict>
-              <key>name</key>
-              <string>keyword.control.stonescript</string>
-            </dict>
-          </dict>
+          <key>include</key>
+          <string>#importer</string>
         </dict>
         <dict>
           <key>match</key>
-          <string>((true|false)(\s+|$))</string>
+          <string>((true|false)($|(?![a-zA-Z_0-9])))</string>
           <key>name</key>
           <string>constant.language.stonescript</string>
         </dict>
@@ -336,7 +320,7 @@
           <array> 
             <dict>
               <key>include</key>
-              <string>#expr__2</string>
+              <string>#expr__1</string>
             </dict>
            </array>
           <key>end</key>
@@ -378,12 +362,6 @@
     <dict>
       <key>patterns</key>
       <array> 
-       </array>
-    </dict>
-    <key>expr__2</key>
-    <dict>
-      <key>patterns</key>
-      <array> 
         <dict>
           <key>match</key>
           <string>(\\.|[^\x{005c}\x{0022}]+)</string>
@@ -400,6 +378,42 @@
           <key>include</key>
           <string>#expr</string>
         </dict>
+       </array>
+    </dict>
+    <key>importer</key>
+    <dict>
+      <key>patterns</key>
+      <array> 
+        <dict>
+          <key>begin</key>
+          <string>((import|new)(\s+|$))</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>keyword.control.stonescript</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string>string.unquoted.stonescript</string>
+          <key>end</key>
+          <string>( |$)</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>keyword.control.stonescript</string>
+            </dict>
+          </dict>
+        </dict>
+       </array>
+    </dict>
+    <key>importer__1</key>
+    <dict>
+      <key>patterns</key>
+      <array> 
        </array>
     </dict>
     <key>lexpr</key>
@@ -519,7 +533,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>((true|false)(\s+|$))</string>
+          <string>((true|false)($|(?![a-zA-Z_0-9])))</string>
           <key>name</key>
           <string>constant.language.stonescript</string>
         </dict>

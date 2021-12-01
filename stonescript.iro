@@ -101,6 +101,9 @@ contexts [] {
          }
       }
       
+      // Import
+      : include "importer";
+      
       // Display command
       : inline_push {
          regex \= (^\s*>.?)
@@ -158,7 +161,7 @@ contexts [] {
          
          // True False
          : pattern {
-            regex \= ((true|false)(\s+|$))
+            regex \= ((true|false)($|(?![a-zA-Z_0-9])))
             styles[] = .constant;
          }
          // Numbers
@@ -178,7 +181,7 @@ contexts [] {
       : include "expr";
    }
    
-   expr : context {
+   importer : context {
       // import|new keyword
       : inline_push {
          regex \= ((import|new)(\s+|$))
@@ -189,9 +192,13 @@ contexts [] {
             styles[] = .control;
          }
       }
+   }
+   
+   expr : context {
+      : include "importer";
       // True False
       : pattern {
-         regex \= ((true|false)(\s+|$))
+         regex \= ((true|false)($|(?![a-zA-Z_0-9])))
          styles[] = .constant;
       }
       // Numbers
